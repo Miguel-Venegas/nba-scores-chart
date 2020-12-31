@@ -119,10 +119,16 @@ const getScoreLine = ({ homeTeam, awayTeam }) => {
     scoreLine = `${aPoints}-<b>${hPoints}</b>`;
   }
   return `${teamNames} ${scoreLine}`;
-
 };
 
-const chart1 = makeChart(playoffGames, 'Golden State');
+const gsSection = document.querySelector('#gs');
+const hrSection = document.querySelector('#hr');
 
-document.body.prepend(chart1);
+
+const gsChart = makeChart(playoffGames, 'Golden State');
+const hrChart = makeChart(playoffGames, 'Houston');
+
+gsSection.append(gsChart);
+hrSection.append(hrChart);
+
 
