@@ -1,4 +1,4 @@
-const warriorsGames = [{
+const playoffGames = [{
     awayTeam: {
       team: 'Golden State',
       points: 119,
@@ -85,38 +85,44 @@ const warriorsGames = [{
 ]
 
 // **************************************************
-// STEP 1 - UGLY, UN-REFACTORED CODE! (but it works!)
+// STEP 2 REFACTORED CODE! (it works!)
 // **************************************************
 
-const makeChart = (games) => {
+const makeChart = (games, targetTeam) => {
 
   const ulParent = document.createElement('ul');
   for (let game of games) {
-    const { homeTeam, awayTeam } = game;
     const gameLi = document.createElement('li');
+    gameLi.innerHTML = getScoreLine(game);
+    gameLi.classList.add(isWinner(game, targetTeam) ? 'win' : 'loss');
 
-    const { team: hTeam, points: hPoints } = homeTeam;
-    const { team: aTeam, points: aPoints } = awayTeam;
-    const teamNames = `${aTeam} @ ${hTeam}`;
-
-    let scoreLine;
-    if (aPoints > hPoints) {
-      scoreLine = `<b>${aPoints}</b>-${hPoints}`;
-    } else {
-      scoreLine = `${aPoints}-<b>${hPoints}</b>`;
-    }
-
-    const warriors = hTeam === 'Golden State' ? homeTeam : awayTeam;
-    gameLi.classList.add(warriors.isWinner ? 'win' : 'loss');
-
-    gameLi.innerHTML = `${teamNames} ${scoreLine}`;
 
     ulParent.appendChild(gameLi);
   }
   return ulParent;
 }
 
-const chart1 = makeChart(warriorsGames);
+const isWinner = ({homeTeam, awayTeam}, targetTeam) => {
+  const target = homeTeam.team === targetTeam ? homeTeam : awayTeam;
+  return target.isWinner;
+}
+
+const getScoreLine = ({ homeTeam, awayTeam }) => {
+  const { team: hTeam, points: hPoints } = homeTeam;
+  const { team: aTeam, points: aPoints } = awayTeam;
+  const teamNames = `${aTeam} @ ${hTeam}`;
+
+  let scoreLine;
+  if (aPoints > hPoints) {
+    scoreLine = `<b>${aPoints}</b>-${hPoints}`;
+  } else {
+    scoreLine = `${aPoints}-<b>${hPoints}</b>`;
+  }
+  return `${teamNames} ${scoreLine}`;
+
+};
+
+const chart1 = makeChart(playoffGames, 'Golden State');
 
 document.body.prepend(chart1);
 
